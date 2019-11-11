@@ -1,4 +1,4 @@
-﻿namespace AppBoard
+﻿namespace BoardEntities
 {
     class Position
     {

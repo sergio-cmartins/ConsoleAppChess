@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AppBoard.Enums;
+﻿using BoardEntities.Enums;
 
-namespace AppBoard
+namespace BoardEntities
 {
     class Piece
     {
         public Position Position { get; set; }
         public Color Color { get; protected set; }
-        public int Moves { get; protected set; }
+        public int MoveCount { get; protected set; }
         public Board Board { get; protected set; }
 
         public Piece(Position position, Board board, Color color)
@@ -17,7 +14,7 @@ namespace AppBoard
             Position = position;
             Color = color;
             Board = board;
-            Moves = 0;
+            MoveCount = 0;
         }
     }
 }

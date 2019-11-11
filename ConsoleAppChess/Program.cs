@@ -1,5 +1,5 @@
 ﻿using System;
-using AppBoard;
+using BoardEntities;
 
 namespace ConsoleAppChess
 {
