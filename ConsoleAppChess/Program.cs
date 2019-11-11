@@ -1,5 +1,6 @@
 ﻿using System;
 using BoardEntities;
+using Presentation;
 
 namespace ConsoleAppChess
 {
@@ -8,7 +9,8 @@ namespace ConsoleAppChess
         static void Main(string[] args)
         {
             Board board = new Board(8, 8);
-            Console.WriteLine(board);
+            Screen.PrintBoard(board);
+            Console.ReadKey();
         }
     }
 }
