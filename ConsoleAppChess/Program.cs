@@ -1,5 +1,5 @@
 ﻿using System;
-using Board;
+using AppBoard;
 
 namespace ConsoleAppChess
 {
@@ -7,8 +7,8 @@ namespace ConsoleAppChess
     {
         static void Main(string[] args)
         {
-            Position p = new Position(1, 8);
-            Console.WriteLine("Posição: " + p);
+            Board board = new Board(8, 8);
+            Console.WriteLine(board);
         }
     }
 }
