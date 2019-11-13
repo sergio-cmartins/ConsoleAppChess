@@ -1,4 +1,6 @@
-﻿namespace BoardEntities
+﻿using Exceptions;
+
+namespace BoardEntities
 {
     class Board
     {
@@ -18,10 +20,43 @@
             return pieces[line, column];
         }
 
+        public Piece Piece(Position position)
+        {
+            return pieces[position.Line, position.Column];
+        }
+
+        public bool ValidPosition(Position position)
+        {
+            if (position.Line >= 0 && position.Line < Lines && position.Column >= 0 && position.Column < Columns)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void ValidatePosition(Position position)
+        {
+            if (!ValidPosition(position))
+            {
+                throw new BoardException("Invalid Position!");
+            }
+        }
+
+        public bool PieceExists(Position position)
+        {
+            ValidatePosition(position);
+            return Piece(position) != null;
+        }
+
         public void InsertPiece(Piece piece, Position position)
         {
+            if (PieceExists(position))
+            {
+                throw new BoardException("Position already used");
+            }
             pieces[position.Line, position.Column] = piece;
             piece.Position = position;
         }
+
     }
 }
