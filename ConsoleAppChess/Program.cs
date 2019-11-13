@@ -17,7 +17,7 @@ namespace ConsoleAppChess
 
                 board.InsertPiece(new Tower(board, Color.Black), new ChessPosition('a',8).ToPosition());
                 board.InsertPiece(new Tower(board, Color.Black), new ChessPosition("h7").ToPosition());
-                board.InsertPiece(new King(board, Color.Black), new Position(2, 4));
+                board.InsertPiece(new King(board, Color.White), new Position(2, 4));
 
                 Screen.PrintBoard(board);
             }
