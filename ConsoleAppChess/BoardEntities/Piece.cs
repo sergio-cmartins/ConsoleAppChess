@@ -16,5 +16,10 @@ namespace BoardEntities
             Board = board;
             MoveCount = 0;
         }
+
+        public void IncreaseMoveCount()
+        {
+            MoveCount++;
+        }
     }
 }

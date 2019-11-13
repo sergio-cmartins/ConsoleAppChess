@@ -3,16 +3,16 @@ using BoardEntities.Enums;
 
 namespace ChessGameEntities
 {
-    class Tower : Piece
+    class Rook : Piece
     {
-        public Tower(Board board, Color color) : base(board, color)
+        public Rook(Board board, Color color) : base(board, color)
         {
 
         }
 
         public override string ToString()
         {
-            return "T";
+            return "R";
         }
     }
 }

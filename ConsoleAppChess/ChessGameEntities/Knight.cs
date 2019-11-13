@@ -12,7 +12,7 @@ namespace ChessGameEntities
 
         public override string ToString()
         {
-            return "H";
+            return "N";
         }
     }
 }

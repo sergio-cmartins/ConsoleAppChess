@@ -58,5 +58,17 @@ namespace BoardEntities
             piece.Position = position;
         }
 
+        public Piece RemovePiece(Position position)
+        {
+            if (Piece(position) == null)
+            {
+                return null;
+            }
+            Piece removedPiece = Piece(position);
+            removedPiece.Position = null;
+            pieces[position.Line, position.Column] = null;
+            return removedPiece;
+        }
+
     }
 }

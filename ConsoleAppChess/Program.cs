@@ -13,13 +13,8 @@ namespace ConsoleAppChess
         {
             try
             {
-                Board board = new Board(8, 8);
-
-                board.InsertPiece(new Tower(board, Color.Black), new ChessPosition('a',8).ToPosition());
-                board.InsertPiece(new Tower(board, Color.Black), new ChessPosition("h7").ToPosition());
-                board.InsertPiece(new King(board, Color.White), new Position(2, 4));
-
-                Screen.PrintBoard(board);
+                ChessMatch chessMatch = new ChessMatch();
+                Screen.PrintBoard(chessMatch.ChessBoard);
             }
             catch(BoardException e)
             {
