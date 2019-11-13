@@ -9,12 +9,15 @@ namespace ChessGameEntities
         public Board ChessBoard { get; private set; }
         private int turn;
         private Color currentPlayer;
+        public bool MatchOver { get; private set; }
+
 
         public ChessMatch()
         {
             ChessBoard = new Board(8, 8);
             turn = 1;
             currentPlayer = Color.White;
+            MatchOver = false;
 
             PutInitialPieces();
         }

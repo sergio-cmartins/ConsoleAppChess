@@ -1,12 +1,13 @@
 ﻿using System;
 using BoardEntities;
 using BoardEntities.Enums;
+using ChessGameEntities;
 
 namespace Presentation
 {
     class Screen
     {
-        public static void PrintBoard(Board board)
+        public static void DisplayChessBoard(Board board)
         {
             for (int i = 0; i < board.Lines; i++)
             {
@@ -19,7 +20,7 @@ namespace Presentation
                     }
                     else
                     {
-                        PrintPiece(board.Piece(i, j));
+                        DisplayPiece(board.Piece(i, j));
                     }
                 }
                 Console.WriteLine();
@@ -27,7 +28,7 @@ namespace Presentation
             Console.WriteLine("  a b c d e f g h");
         }
 
-        public static void PrintPiece(Piece piece)
+        public static void DisplayPiece(Piece piece)
         {
             if (piece.Color == Color.White)
             {
@@ -41,6 +42,11 @@ namespace Presentation
                 Console.ForegroundColor = aux;
 
             }
+        }
+
+        public static ChessPosition ReadChessPosition()
+        {
+            return new ChessPosition(Console.ReadLine());
         }
     }
 }

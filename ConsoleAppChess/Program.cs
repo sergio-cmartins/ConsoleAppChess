@@ -14,7 +14,17 @@ namespace ConsoleAppChess
             try
             {
                 ChessMatch chessMatch = new ChessMatch();
-                Screen.PrintBoard(chessMatch.ChessBoard);
+                while (!chessMatch.MatchOver)
+                {
+                    Console.Clear();
+                    Screen.DisplayChessBoard(chessMatch.ChessBoard);
+                    Console.Write("\nOrigin: ");
+                    Position origin = Screen.ReadChessPosition().ToPosition();
+                    Console.Write("\nDestination: ");
+                    Position destination = Screen.ReadChessPosition().ToPosition();
+
+                    chessMatch.ExecuteMove(origin, destination);
+                }
             }
             catch(BoardException e)
             {
