@@ -16,10 +16,10 @@ namespace ConsoleAppChess
                 ChessMatch chessMatch = new ChessMatch();
                 while (!chessMatch.MatchOver)
                 {
-                    Console.Clear();
                     Screen.DisplayChessBoard(chessMatch.ChessBoard);
                     Console.Write("\nOrigin: ");
                     Position origin = Screen.ReadChessPosition().ToPosition();
+                    Screen.DisplayChessBoard(chessMatch.ChessBoard, origin);
                     Console.Write("\nDestination: ");
                     Position destination = Screen.ReadChessPosition().ToPosition();
 

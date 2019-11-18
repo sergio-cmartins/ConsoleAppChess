@@ -61,14 +61,14 @@ namespace ChessGameEntities
             ChessBoard.InsertPiece(new Knight(ChessBoard, Color.Black), new ChessPosition("g8").ToPosition());
             ChessBoard.InsertPiece(new Rook(ChessBoard, Color.Black), new ChessPosition("h8").ToPosition());
 
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("a7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("b7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("c7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("d7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("e7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("f7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("g7").ToPosition());
-            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("h7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("a7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("b7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("c7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("d7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("e7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("f7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("g7").ToPosition());
+            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("h7").ToPosition());
         }
 
     }

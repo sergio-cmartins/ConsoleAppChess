@@ -25,6 +25,15 @@ namespace BoardEntities
             return pieces[position.Line, position.Column];
         }
 
+        public bool ValidPosition(int line, int column)
+        {
+            if (line >= 0 && line < Lines && column >= 0 && column < Columns)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public bool ValidPosition(Position position)
         {
             if (position.Line >= 0 && position.Line < Lines && position.Column >= 0 && position.Column < Columns)

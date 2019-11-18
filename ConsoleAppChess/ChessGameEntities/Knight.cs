@@ -14,5 +14,15 @@ namespace ChessGameEntities
         {
             return "N";
         }
+
+        public override bool[,] AvailableMovements()
+        {
+            bool[,] allowedPositions = new bool[Board.Lines, Board.Columns];
+
+            //Piece can never move to it's own position
+            allowedPositions[Position.Line, Position.Column] = false;
+
+            return allowedPositions;
+        }
     }
 }

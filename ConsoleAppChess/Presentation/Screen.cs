@@ -9,14 +9,36 @@ namespace Presentation
     {
         public static void DisplayChessBoard(Board board)
         {
+            Console.Clear();
             for (int i = 0; i < board.Lines; i++)
             {
                 Console.Write(8 - i + " ");
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (board.Piece(i, j) == null)
+                    DisplayPiece(board.Piece(i, j));
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("  a b c d e f g h");
+        }
+
+        public static void DisplayChessBoard(Board board, Position origin)
+        {
+            Console.Clear();
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            bool[,] allowedPositions = board.Piece(origin).AvailableMovements();
+            
+
+            for (int i = 0; i < board.Lines; i++)
+            {
+                Console.Write(8 - i + " ");
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if (allowedPositions[i, j])
                     {
-                        Console.Write("- ");
+                        Console.BackgroundColor = ConsoleColor.DarkGray;
+                        DisplayPiece(board.Piece(i, j));
+                        Console.BackgroundColor = originalBackground;
                     }
                     else
                     {
@@ -26,21 +48,27 @@ namespace Presentation
                 Console.WriteLine();
             }
             Console.WriteLine("  a b c d e f g h");
+
         }
 
         public static void DisplayPiece(Piece piece)
         {
-            if (piece.Color == Color.White)
-            {
-                Console.Write(piece + " ");
+            if (piece != null) { 
+                if (piece.Color == Color.White)
+                {
+                    Console.Write(piece + " ");
+                }
+                else
+                {
+                    ConsoleColor aux = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write(piece + " ");
+                    Console.ForegroundColor = aux;
+                }
             }
             else
             {
-                ConsoleColor aux = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write(piece + " ");
-                Console.ForegroundColor = aux;
-
+                Console.Write("- ");
             }
         }
 

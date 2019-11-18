@@ -2,7 +2,7 @@
 
 namespace BoardEntities
 {
-    class Piece
+    abstract class Piece
     {
         public Position Position { get; set; }
         public Color Color { get; protected set; }
@@ -17,9 +17,17 @@ namespace BoardEntities
             MoveCount = 0;
         }
 
+        protected bool MoveAllowed(int line, int column)
+        {
+            Piece p = Board.Piece(line, column);
+            return p == null || p.Color != Color;
+        }
+
         public void IncreaseMoveCount()
         {
             MoveCount++;
         }
+
+        public abstract bool[,] AvailableMovements();
     }
 }
