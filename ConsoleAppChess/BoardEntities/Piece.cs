@@ -33,6 +33,19 @@ namespace BoardEntities
             MoveCount++;
         }
 
+        public bool ExistsAvailableMoves()
+        {
+            bool[,] availableMoves = AvailableMovements();
+            foreach (bool current in availableMoves)
+            {
+                if (current)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public abstract bool[,] AvailableMovements();
     }
 }

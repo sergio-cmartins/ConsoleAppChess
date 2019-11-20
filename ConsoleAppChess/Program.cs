@@ -16,17 +16,35 @@ namespace ConsoleAppChess
                 ChessMatch chessMatch = new ChessMatch();
                 while (!chessMatch.MatchOver)
                 {
-                    Screen.DisplayChessBoard(chessMatch.ChessBoard);
-                    Console.Write("\nOrigin: ");
-                    Position origin = Screen.ReadChessPosition().ToPosition();
-                    Screen.DisplayChessBoard(chessMatch.ChessBoard, origin);
-                    Console.Write("\nDestination: ");
-                    Position destination = Screen.ReadChessPosition().ToPosition();
+                    try
+                    {
+                        Screen.DisplayChessBoard(chessMatch.ChessBoard);
+                        Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
 
-                    chessMatch.ExecuteMove(origin, destination);
+                        Console.Write("\nOrigin: ");
+                        Position origin = Screen.ReadChessPosition().ToPosition();
+                        chessMatch.ValidateOrigin(origin);
+
+                        Screen.DisplayChessBoard(chessMatch.ChessBoard, origin);
+                        Console.Write("\nDestination: ");
+                        Position destination = Screen.ReadChessPosition().ToPosition();
+                        chessMatch.ValidateDestination(origin, destination);
+                        chessMatch.MakeAMove(origin, destination);
+
+                    }
+                    catch (ChessMatchException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
+                    catch (BoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
                 }
             }
-            catch(BoardException e)
+            catch (BoardException e)
             {
                 Console.WriteLine(e.Message);
             }

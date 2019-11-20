@@ -1,25 +1,51 @@
 ﻿using System;
 using BoardEntities;
 using BoardEntities.Enums;
+using Exceptions;
 
 namespace ChessGameEntities
 {
     class ChessMatch
     {
         public Board ChessBoard { get; private set; }
-        private int turn;
-        private Color currentPlayer;
+        public int Turn { get; private set; }
+        public Color CurrentPlayer { get; private set; }
         public bool MatchOver { get; private set; }
 
 
         public ChessMatch()
         {
             ChessBoard = new Board(8, 8);
-            turn = 1;
-            currentPlayer = Color.White;
+            Turn = 1;
+            CurrentPlayer = Color.White;
             MatchOver = false;
-
             PutInitialPieces();
+        }
+
+        public void ValidateOrigin(Position origin)
+        {
+            ChessBoard.ValidatePosition(origin);
+            if (ChessBoard.Piece(origin) == null)
+            {
+                throw new ChessMatchException("There is no Piece in this Position.");
+            }
+            if (ChessBoard.Piece(origin).Color != CurrentPlayer)
+            {
+                throw new ChessMatchException("The choosen piece isn't yours");
+            }
+            if (!ChessBoard.Piece(origin).ExistsAvailableMoves())
+            {
+                throw new ChessMatchException("There are no Moves for this Piece");
+            }
+        }
+
+        public void ValidateDestination(Position origin, Position destination)
+        {
+            ChessBoard.ValidatePosition(destination);
+            if (!ChessBoard.Piece(origin).AvailableMovements()[destination.Line, destination.Column])
+            {
+                throw new ChessMatchException("This move is not Allowed.");
+            }
         }
 
         public void ExecuteMove(Position origin, Position destination)
@@ -28,8 +54,15 @@ namespace ChessGameEntities
             p.IncreaseMoveCount();
             Piece CapturedPiece = ChessBoard.RemovePiece(destination);
             ChessBoard.InsertPiece(p, destination);
-
         }
+
+        public void MakeAMove(Position origin, Position destination)
+        {
+            ExecuteMove(origin, destination);
+            Turn++;
+            CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
+        }
+
         private void PutInitialPieces()
         {
             //Populate White Pieces;
@@ -61,14 +94,14 @@ namespace ChessGameEntities
             ChessBoard.InsertPiece(new Knight(ChessBoard, Color.Black), new ChessPosition("g8").ToPosition());
             ChessBoard.InsertPiece(new Rook(ChessBoard, Color.Black), new ChessPosition("h8").ToPosition());
 
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("a7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("b7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("c7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("d7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("e7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("f7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("g7").ToPosition());
-            //ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("h7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("a7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("b7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("c7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("d7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("e7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("f7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("g7").ToPosition());
+            ChessBoard.InsertPiece(new Pawn(ChessBoard, Color.Black), new ChessPosition("h7").ToPosition());
         }
 
     }
