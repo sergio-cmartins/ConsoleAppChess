@@ -46,6 +46,11 @@ namespace BoardEntities
             return false;
         }
 
+        public bool CanMove(Position destination)
+        {
+            return AvailableMovements()[destination.Line, destination.Column];
+        }
+
         public abstract bool[,] AvailableMovements();
     }
 }

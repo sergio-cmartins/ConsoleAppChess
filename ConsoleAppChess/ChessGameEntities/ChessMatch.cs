@@ -42,7 +42,7 @@ namespace ChessGameEntities
         public void ValidateDestination(Position origin, Position destination)
         {
             ChessBoard.ValidatePosition(destination);
-            if (!ChessBoard.Piece(origin).AvailableMovements()[destination.Line, destination.Column])
+            if (!ChessBoard.Piece(origin).CanMove(destination))
             {
                 throw new ChessMatchException("This move is not Allowed.");
             }
