@@ -17,10 +17,65 @@ namespace ChessGameEntities
 
         public override bool[,] AvailableMovements()
         {
+            int l, c;
             bool[,] allowedPositions = new bool[Board.Lines, Board.Columns];
 
-            //Piece can never move to it's own position
-            allowedPositions[Position.Line, Position.Column] = false;
+            //Up & Right
+            l = Position.Line - 1;
+            c = Position.Column + 1;
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+            {
+                allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
+                {
+                    break;
+                }
+                l--;
+                c++;
+            }
+
+            //Down & Right
+            l = Position.Line + 1;
+            c = Position.Column + 1;
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+            {
+                allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
+                {
+                    break;
+                }
+                l++;
+                c++;
+            }
+
+            //Down & Left
+            l = Position.Line + 1;
+            c = Position.Column - 1;
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+
+            {
+                allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
+                {
+                    break;
+                }
+                l++;
+                c--;
+            }
+
+            //Up & Left
+            l = Position.Line - 1;
+            c = Position.Column - 1;
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+            {
+                allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
+                {
+                    break;
+                }
+                l--;
+                c--;
+            }
 
             return allowedPositions;
         }

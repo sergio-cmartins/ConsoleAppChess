@@ -23,10 +23,10 @@ namespace ChessGameEntities
             //Up
             l = Position.Line - 1;
             c = Position.Column;
-            while(Board.ValidPosition(l,c) && MoveAllowed(l, c))
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
             {
                 allowedPositions[l, c] = true;
-                if (Board.Piece(l,c) != null && Board.Piece(l,c).Color != Color)
+                if (CaptureAllowed(l, c))
                 {
                     break;
                 }
@@ -36,10 +36,10 @@ namespace ChessGameEntities
             //Right
             l = Position.Line;
             c = Position.Column + 1;
-            while (Board.ValidPosition(l, c) && MoveAllowed(l, c))
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
             {
                 allowedPositions[l, c] = true;
-                if (Board.Piece(l, c) != null && Board.Piece(l, c).Color != Color)
+                if (CaptureAllowed(l,c))
                 {
                     break;
                 }
@@ -49,10 +49,10 @@ namespace ChessGameEntities
             //Down
             l = Position.Line + 1;
             c = Position.Column;
-            while (Board.ValidPosition(l, c) && MoveAllowed(l, c))
-            {
-                allowedPositions[l, c] = true;
-                if (Board.Piece(l, c) != null && Board.Piece(l, c).Color != Color)
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+                {
+                    allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
                 {
                     break;
                 }
@@ -62,15 +62,17 @@ namespace ChessGameEntities
             //Left
             l = Position.Line;
             c = Position.Column - 1;
-            while (Board.ValidPosition(l, c) && MoveAllowed(l, c))
-            {
-                allowedPositions[l, c] = true;
-                if (Board.Piece(l, c) != null && Board.Piece(l, c).Color != Color)
+            while (Board.ValidPosition(l, c) && (MoveAllowed(l, c) || CaptureAllowed(l, c)))
+
+                {
+                    allowedPositions[l, c] = true;
+                if (CaptureAllowed(l, c))
                 {
                     break;
                 }
                 c--;
             }
+
             return allowedPositions;
         }
     }

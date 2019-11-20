@@ -19,8 +19,13 @@ namespace BoardEntities
 
         protected bool MoveAllowed(int line, int column)
         {
+            return Board.Piece(line, column) == null;
+        }
+
+        protected bool CaptureAllowed(int line, int column)
+        {
             Piece p = Board.Piece(line, column);
-            return p == null || p.Color != Color;
+            return p != null && p.Color != Color;
         }
 
         public void IncreaseMoveCount()

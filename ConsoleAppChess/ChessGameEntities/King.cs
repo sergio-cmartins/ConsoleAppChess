@@ -27,7 +27,7 @@ namespace ChessGameEntities
                 {
                     if (l != Position.Line || c != Position.Column) // the piece cannot move to it's own position
                     {
-                        if (Board.ValidPosition(l,c) && MoveAllowed(l, c))
+                        if (Board.ValidPosition(l,c) && (MoveAllowed(l, c) || CaptureAllowed(l,c)))
                         {
                             allowedPositions[l, c] = true;
                         }
