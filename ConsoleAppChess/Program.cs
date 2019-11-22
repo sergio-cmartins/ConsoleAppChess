@@ -18,8 +18,7 @@ namespace ConsoleAppChess
                 {
                     try
                     {
-                        Screen.DisplayChessBoard(chessMatch.ChessBoard);
-                        Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
+                        Screen.DisplayChessMatch(chessMatch);
 
                         Console.Write("\nOrigin: ");
                         Position origin = Screen.ReadChessPosition().ToPosition();

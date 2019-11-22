@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BoardEntities;
 using BoardEntities.Enums;
 using ChessGameEntities;
@@ -7,9 +8,53 @@ namespace Presentation
 {
     class Screen
     {
-        public static void DisplayChessBoard(Board board)
+        public static void DisplayChessMatch(ChessMatch chessMatch)
         {
             Console.Clear();
+            DisplayChessBoard(chessMatch.ChessBoard);
+            DisplayCapturedPieces(chessMatch);
+            Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
+        }
+
+        public static void DisplayCapturedPieces(ChessMatch chessMatch)
+        {
+            Console.WriteLine("\nCaptured Pieces: ");
+            Console.Write("White: ");
+            DisplaySetPieces(chessMatch.CapturedPieces(Color.White));
+
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("Black: ");
+            DisplaySetPieces(chessMatch.CapturedPieces(Color.Black));
+            Console.ForegroundColor = aux;
+
+            Console.WriteLine();
+        }
+
+        public static void DisplaySetPieces(HashSet<Piece> pieces)
+        {
+            bool firstPiece = true;
+            Console.Write("[");
+            foreach (Piece piece in pieces)
+            {
+
+                if (firstPiece)
+                {
+                    Console.Write(piece);
+                    firstPiece = false;
+                }
+                else
+                {
+                    Console.Write("," + piece);
+                }
+            }
+            Console.WriteLine("]");
+
+
+        }
+
+        public static void DisplayChessBoard(Board board)
+        {
             for (int i = 0; i < board.Lines; i++)
             {
                 Console.Write(8 - i + " ");
@@ -27,7 +72,7 @@ namespace Presentation
             Console.Clear();
             ConsoleColor originalBackground = Console.BackgroundColor;
             bool[,] allowedPositions = board.Piece(origin).AvailableMovements();
-            
+
 
             for (int i = 0; i < board.Lines; i++)
             {
@@ -53,7 +98,8 @@ namespace Presentation
 
         public static void DisplayPiece(Piece piece)
         {
-            if (piece != null) { 
+            if (piece != null)
+            {
                 if (piece.Color == Color.White)
                 {
                     Console.Write(piece + " ");
