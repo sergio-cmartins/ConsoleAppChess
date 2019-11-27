@@ -33,6 +33,11 @@ namespace BoardEntities
             MoveCount++;
         }
 
+        public void DecreaseMoveCount()
+        {
+            MoveCount--;
+        }
+
         public bool ExistsAvailableMoves()
         {
             bool[,] availableMoves = AvailableMovements();

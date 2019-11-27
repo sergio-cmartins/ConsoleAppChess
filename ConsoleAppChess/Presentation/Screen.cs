@@ -14,6 +14,10 @@ namespace Presentation
             DisplayChessBoard(chessMatch.ChessBoard);
             DisplayCapturedPieces(chessMatch);
             Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
+            if (chessMatch.Check)
+            {
+                Console.WriteLine("CHECK!");
+            }
         }
 
         public static void DisplayCapturedPieces(ChessMatch chessMatch)

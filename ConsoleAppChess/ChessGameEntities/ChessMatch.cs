@@ -7,13 +7,13 @@ namespace ChessGameEntities
 {
     class ChessMatch
     {
+        private HashSet<Piece> boardPieces;
+        private HashSet<Piece> capturedPieces;
         public Board ChessBoard { get; private set; }
         public int Turn { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool MatchOver { get; private set; }
-        private HashSet<Piece> boardPieces;
-        private HashSet<Piece> capturedPieces;
-
+        public bool Check { get; private set; }
 
         public ChessMatch()
         {
@@ -21,6 +21,7 @@ namespace ChessGameEntities
             Turn = 1;
             CurrentPlayer = Color.White;
             MatchOver = false;
+            Check = false;
             boardPieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
             PutInitialPieces();
@@ -52,7 +53,7 @@ namespace ChessGameEntities
             }
         }
 
-        public void ExecuteMove(Position origin, Position destination)
+        public Piece ExecuteMove(Position origin, Position destination)
         {
             Piece p = ChessBoard.RemovePiece(origin);
             p.IncreaseMoveCount();
@@ -62,12 +63,32 @@ namespace ChessGameEntities
             {
                 capturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void UndoMove(Position origin, Position destination, Piece capturedPiece)
+        {
+            Piece p = ChessBoard.RemovePiece(destination);
+            p.DecreaseMoveCount();
+            if (capturedPiece != null)
+            {
+                ChessBoard.InsertPiece(capturedPiece, destination);
+                capturedPieces.Remove(capturedPiece);
+            }
+            ChessBoard.InsertPiece(p, origin);
         }
 
         public void MakeAMove(Position origin, Position destination)
         {
-            ExecuteMove(origin, destination);
+            Piece capturedPiece = ExecuteMove(origin, destination);
+            if (PlayerInCheck(CurrentPlayer))
+            {
+                UndoMove(origin, destination, capturedPiece);
+                throw new ChessMatchException("You cannot make a move that puts you in Check!");
+            }
+
             Turn++;
+            Check = PlayerInCheck(OpposingPlayer(CurrentPlayer));
             CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
         }
 
@@ -94,14 +115,54 @@ namespace ChessGameEntities
                     aux.Add(piece);
                 }
             }
-            aux.ExceptWith(capturedPieces);
+            aux.ExceptWith(CapturedPieces(color));
             return aux;
         }
 
-        public void PutChessPiece(Piece piece, char column, int line)
+        private Color OpposingPlayer(Color color)
         {
-            ChessBoard.InsertPiece(piece, new ChessPosition(column, line).ToPosition());
-            boardPieces.Add(piece);
+            return (color == Color.White) ? Color.Black : Color.White;
+        }
+
+        private Piece ActiveKing(Color color)
+        {
+            foreach (Piece piece in ActivePieces(color))
+            {
+                if (piece is King)
+                {
+                    return piece;
+                }
+            }
+            return null;
+        }
+
+        public bool PlayerInCheck(Color color)
+        {
+            Piece k = ActiveKing(color);
+            if (k == null)
+            {
+                throw new ChessMatchException("There is no " + k.Color + " king");
+            }
+            foreach (Piece piece in ActivePieces(OpposingPlayer(color)))
+            {
+                bool[,] moves = piece.AvailableMovements();
+                if (moves[k.Position.Line, k.Position.Column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void PutInitialPieces()
+        {
+            //Populate White Pieces;
+            PopulateFirstRank(Color.White);
+            PopulatePawns(Color.White);
+
+            //Populate Black Pieces;
+            PopulateFirstRank(Color.Black);
+            PopulatePawns(Color.Black);
         }
 
         private void PopulateFirstRank(Color color)
@@ -126,16 +187,10 @@ namespace ChessGameEntities
             }
         }
 
-        private void PutInitialPieces()
+        public void PutChessPiece(Piece piece, char column, int line)
         {
-            //Populate White Pieces;
-            PopulateFirstRank(Color.White);
-            PopulatePawns(Color.White);
-
-            //Populate Black Pieces;
-            PopulateFirstRank(Color.Black);
-            PopulatePawns(Color.Black);
+            ChessBoard.InsertPiece(piece, new ChessPosition(column, line).ToPosition());
+            boardPieces.Add(piece);
         }
-
     }
 }
