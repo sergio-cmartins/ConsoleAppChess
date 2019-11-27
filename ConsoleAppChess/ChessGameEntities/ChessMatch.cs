@@ -14,6 +14,13 @@ namespace ChessGameEntities
         public Color CurrentPlayer { get; private set; }
         public bool MatchOver { get; private set; }
         public bool Check { get; private set; }
+        public Color OposingPlayer
+        {
+            get
+            {
+                return CurrentPlayer == Color.White ? Color.Black : Color.White;
+            }
+        }
 
         public ChessMatch()
         {
@@ -86,10 +93,16 @@ namespace ChessGameEntities
                 UndoMove(origin, destination, capturedPiece);
                 throw new ChessMatchException("You cannot make a move that puts you in Check!");
             }
-
-            Turn++;
             Check = PlayerInCheck(OpposingPlayer(CurrentPlayer));
-            CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
+            if (PlayerCheckMated(OpposingPlayer(CurrentPlayer)))
+            {
+                MatchOver = true;
+            }
+            else
+            {
+                Turn++;
+                CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
+            }
         }
 
         public HashSet<Piece> CapturedPieces(Color color)
@@ -152,6 +165,37 @@ namespace ChessGameEntities
                 }
             }
             return false;
+        }
+
+        public bool PlayerCheckMated(Color color)
+        {
+            if (!PlayerInCheck(color))
+            {
+                return false;
+            }
+            foreach (Piece piece in ActivePieces(color))
+            {
+                bool[,] moves = piece.AvailableMovements();
+                for (int i = 0; i < ChessBoard.Lines; i++)
+                {
+                    for (int j = 0; j < ChessBoard.Columns; j++)
+                    {
+                        if (moves[i, j])
+                        {
+                            Position origin = piece.Position;
+                            Position destination = new Position(i, j);
+                            Piece capturedPiece = ExecuteMove(origin, destination);
+                            bool inCheck = PlayerInCheck(color);
+                            UndoMove(origin, destination, capturedPiece);
+                            if (!inCheck)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         private void PutInitialPieces()

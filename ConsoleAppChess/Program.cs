@@ -42,6 +42,7 @@ namespace ConsoleAppChess
                         Console.ReadLine();
                     }
                 }
+                Screen.DisplayChessMatch(chessMatch);
             }
             catch (BoardException e)
             {

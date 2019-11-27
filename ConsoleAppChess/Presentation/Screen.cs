@@ -14,7 +14,10 @@ namespace Presentation
             DisplayChessBoard(chessMatch.ChessBoard);
             DisplayCapturedPieces(chessMatch);
             Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
-            if (chessMatch.Check)
+            if (chessMatch.MatchOver)
+            {
+                Console.WriteLine("player " + chessMatch.OposingPlayer + " CHECKMATED, player " + chessMatch.CurrentPlayer + " Won!");
+            } else if (chessMatch.Check)
             {
                 Console.WriteLine("CHECK!");
             }
