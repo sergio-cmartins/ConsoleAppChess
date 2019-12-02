@@ -16,7 +16,7 @@ namespace Presentation
             Console.WriteLine("\nTurn: {0}, Current Player: {1}", chessMatch.Turn, chessMatch.CurrentPlayer);
             if (chessMatch.MatchOver)
             {
-                Console.WriteLine("player " + chessMatch.OposingPlayer + " CHECKMATED, player " + chessMatch.CurrentPlayer + " Won!");
+                Console.WriteLine(chessMatch.OposingPlayer + " player CHECKMATED, " + chessMatch.CurrentPlayer + " player Won!");
             } else if (chessMatch.Check)
             {
                 Console.WriteLine("CHECK!");

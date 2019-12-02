@@ -70,6 +70,25 @@ namespace ChessGameEntities
             {
                 capturedPieces.Add(capturedPiece);
             }
+
+            //#Special Move KingSide Castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position pRook = new Position(origin.Line, 7);
+                Piece r = ChessBoard.RemovePiece(pRook);
+                r.IncreaseMoveCount();
+                ChessBoard.InsertPiece(r, new Position(destination.Line, destination.Column - 1));
+            }
+
+            //#Special Move QueenSide Castling
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position pRook = new Position(origin.Line, 0);
+                Piece r = ChessBoard.RemovePiece(pRook);
+                r.IncreaseMoveCount();
+                ChessBoard.InsertPiece(r, new Position(destination.Line, destination.Column + 1));
+            }
+
             return capturedPiece;
         }
 
@@ -83,6 +102,25 @@ namespace ChessGameEntities
                 capturedPieces.Remove(capturedPiece);
             }
             ChessBoard.InsertPiece(p, origin);
+
+            //#Special Move KingSide Castling
+            if (p is King && destination.Column == origin.Column + 2)
+            {
+                Position pRook = new Position(destination.Line, destination.Column - 1);
+                Piece r = ChessBoard.RemovePiece(pRook);
+                r.DecreaseMoveCount();
+                ChessBoard.InsertPiece(r, new Position(origin.Line, 7));
+            }
+
+            //#Special Move QueenSide Castling
+            if (p is King && destination.Column == origin.Column - 2)
+            {
+                Position pRook = new Position(destination.Line, destination.Column + 1);
+                Piece r = ChessBoard.RemovePiece(pRook);
+                r.DecreaseMoveCount();
+                ChessBoard.InsertPiece(r, new Position(origin.Line, 0));
+            }
+
         }
 
         public void MakeAMove(Position origin, Position destination)
@@ -219,7 +257,7 @@ namespace ChessGameEntities
             PutChessPiece(new Bishop(ChessBoard, color), 'c', line);
             PutChessPiece(new Bishop(ChessBoard, color), 'f', line);
             PutChessPiece(new Queen(ChessBoard, color), 'd', line);
-            PutChessPiece(new King(ChessBoard, color), 'e', line);
+            PutChessPiece(new King(ChessBoard, color, this), 'e', line);
         }
 
         private void PopulatePawns(Color color)
