@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BoardEntities;
 using BoardEntities.Enums;
 using Exceptions;
@@ -7,13 +8,12 @@ namespace ChessGameEntities
 {
     class ChessMatch
     {
-        private HashSet<Piece> boardPieces;
-        private HashSet<Piece> capturedPieces;
         public Board ChessBoard { get; private set; }
         public int Turn { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool MatchOver { get; private set; }
         public bool Check { get; private set; }
+        public Piece EnPassantTarget { get; private set; }
         public Color OposingPlayer
         {
             get
@@ -21,6 +21,8 @@ namespace ChessGameEntities
                 return CurrentPlayer == Color.White ? Color.Black : Color.White;
             }
         }
+        private HashSet<Piece> boardPieces;
+        private HashSet<Piece> capturedPieces;
 
         public ChessMatch()
         {
@@ -31,6 +33,7 @@ namespace ChessGameEntities
             Check = false;
             boardPieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
+            EnPassantTarget = null;
             PutInitialPieces();
         }
 
@@ -89,6 +92,16 @@ namespace ChessGameEntities
                 ChessBoard.InsertPiece(r, new Position(destination.Line, destination.Column + 1));
             }
 
+            //#Special Move En Passant
+            if (p is Pawn && EnPassantTarget != null && ChessBoard.Piece(origin.Line, destination.Column) == EnPassantTarget)
+            {
+                capturedPiece = ChessBoard.RemovePiece(EnPassantTarget.Position);
+                if (capturedPiece != null)
+                {
+                    capturedPieces.Add(capturedPiece);
+                }
+            }
+
             return capturedPiece;
         }
 
@@ -98,7 +111,15 @@ namespace ChessGameEntities
             p.DecreaseMoveCount();
             if (capturedPiece != null)
             {
-                ChessBoard.InsertPiece(capturedPiece, destination);
+                if (EnPassantTarget != null && EnPassantTarget.Position == null) // check if last move was enPassant
+                {
+                    Position enPassantOriginal = new Position(origin.Line, destination.Column);
+                    ChessBoard.InsertPiece(capturedPiece, enPassantOriginal);
+                }
+                else
+                {
+                    ChessBoard.InsertPiece(capturedPiece, destination);
+                }
                 capturedPieces.Remove(capturedPiece);
             }
             ChessBoard.InsertPiece(p, origin);
@@ -120,7 +141,6 @@ namespace ChessGameEntities
                 r.DecreaseMoveCount();
                 ChessBoard.InsertPiece(r, new Position(origin.Line, 0));
             }
-
         }
 
         public void MakeAMove(Position origin, Position destination)
@@ -138,6 +158,16 @@ namespace ChessGameEntities
             }
             else
             {
+                //#Special Move - Enpassant - Checking for vulnerability
+                if (ChessBoard.Piece(destination) is Pawn && Math.Abs(destination.Line - origin.Line) == 2)
+                {
+                    EnPassantTarget = ChessBoard.Piece(destination);
+                }
+                else
+                {
+                    EnPassantTarget = null;
+                }
+
                 Turn++;
                 CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
             }
@@ -238,6 +268,18 @@ namespace ChessGameEntities
 
         private void PutInitialPieces()
         {
+            /*
+            // Test of undo for check into en Passant
+            PutChessPiece(new King(ChessBoard, Color.Black, this), 'e', 8);
+            PutChessPiece(new Queen(ChessBoard, Color.Black), 'd', 8);
+            PutChessPiece(new Pawn(ChessBoard, Color.Black, this), 'c', 7);
+            PutChessPiece(new Pawn(ChessBoard, Color.Black, this), 'e', 7);
+
+            PutChessPiece(new King(ChessBoard, Color.White, this), 'd', 1);
+            PutChessPiece(new Queen(ChessBoard, Color.White), 'e', 1);
+            PutChessPiece(new Pawn(ChessBoard, Color.White, this), 'd', 2);
+            PutChessPiece(new Pawn(ChessBoard, Color.White, this), 'e', 2);
+            */
             //Populate White Pieces;
             PopulateFirstRank(Color.White);
             PopulatePawns(Color.White);
@@ -265,7 +307,7 @@ namespace ChessGameEntities
             int line = (color == Color.White) ? 2 : 7;
             for (char i = 'a'; i <= 'h'; i++)
             {
-                PutChessPiece(new Pawn(ChessBoard, color), i, line);
+                PutChessPiece(new Pawn(ChessBoard, color, this), i, line);
             }
         }
 
