@@ -151,6 +151,31 @@ namespace ChessGameEntities
                 UndoMove(origin, destination, capturedPiece);
                 throw new ChessMatchException("You cannot make a move that puts you in Check!");
             }
+
+            Piece currentPiece = ChessBoard.Piece(destination);
+            int promotionRank = (CurrentPlayer == Color.White) ? 0 : 7;
+            EnPassantTarget = null;
+
+            //# Special Moves - Pawn
+            if (currentPiece is Pawn)
+            {
+                //check for en Passant vulnerability
+                if (Math.Abs(destination.Line - origin.Line) == 2)
+                {
+                    EnPassantTarget = currentPiece;
+                }
+
+                //pawn promotion
+                else if (destination.Line == promotionRank)
+                {
+                    currentPiece = ChessBoard.RemovePiece(destination);
+                    boardPieces.Remove(currentPiece);
+                    Piece promotedPiece = new Queen(ChessBoard, CurrentPlayer);
+                    ChessBoard.InsertPiece(promotedPiece, destination);
+                    boardPieces.Add(promotedPiece);
+                }
+            }
+
             Check = PlayerInCheck(OpposingPlayer(CurrentPlayer));
             if (PlayerCheckMated(OpposingPlayer(CurrentPlayer)))
             {
@@ -158,16 +183,6 @@ namespace ChessGameEntities
             }
             else
             {
-                //#Special Move - Enpassant - Checking for vulnerability
-                if (ChessBoard.Piece(destination) is Pawn && Math.Abs(destination.Line - origin.Line) == 2)
-                {
-                    EnPassantTarget = ChessBoard.Piece(destination);
-                }
-                else
-                {
-                    EnPassantTarget = null;
-                }
-
                 Turn++;
                 CurrentPlayer = (CurrentPlayer == Color.White) ? Color.Black : Color.White;
             }
